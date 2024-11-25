@@ -3,6 +3,9 @@ function setup() {
   background(255, 204, 204);
 }
 
+let x = 200;
+let y = 200;
+let s = 20;
 /*
 let ballX = 300;
 let ballY = 400; 
@@ -11,9 +14,30 @@ let s= 1;
 
 let state = "start";
 
+function HEARTS(x, y, s) {
+  //HEART
+  noStroke();
+  fill(255, 102, 102);
+  ellipse(x + 10 * s, y + 20 * s, 220 * s, 200 * s);
+  ellipse(x + 200 * s, y + 20 * s, 220 * s, 200 * s);
+  rect(x + 75 * s, y + 66 * s, 50 * s, 40 * s);
+  triangle(
+    x - 70 * s,
+    y + 89 * s,
+    x + 105 * s,
+    y + 300 * s,
+    x + 281 * s,
+    y + 87 * s
+  );
+}
+
 function startScreen() {
   //BACKGROUND
   background(255, 204, 204);
+
+  // for (let i = 0; i < 100; i++) {
+  //   HEARTS(i * 230, 230);
+  // }
 
   //TITLE BUTTON
   noStroke();
@@ -48,7 +72,7 @@ function startScreen() {
   fill(160);
   noStroke();
   textAlign(CENTER);
-  text("Instructions!", 310, 386);
+  text("Instructions", 310, 386);
   textSize(50);
 
   //MOUSE WHEN CLICKED START
@@ -79,7 +103,7 @@ function instructionsScreen() {
   fill(160);
   noStroke();
   textAlign(CENTER);
-  text("Instructions!", 305, 115);
+  text("Instructions", 305, 115);
   textSize(15);
 
   //FLOWING TEXT
@@ -159,7 +183,7 @@ function winScreen() {
   fill(255);
   noStroke();
   textAlign(CENTER);
-  text("YOU WON!!", 305, 275);
+  text("YOU WON!", 305, 275);
   textSize(15);
 
   //START PAGE BUTTON
@@ -191,7 +215,7 @@ function winScreen() {
   fill(160);
   noStroke();
   textAlign(CENTER);
-  text("Play!", 525, 545);
+  text("Play again!", 525, 545);
   textSize(50);
 
   //MOUSE WHEN CLICKED START PAGE
@@ -221,11 +245,19 @@ function loseScreen() {
   rect(275, 266, 50, 40);
   triangle(130, 289, 305, 500, 481, 287);
 
-  //YOU WON TEXT
+  //LINES ON HEART
+  strokeWeight(10);
+  stroke(200, 0, 80);
+  line(305, 175, 260, 250);
+  line(260, 250, 340, 315);
+  line(340, 315, 275, 375);
+  line(275, 375, 305, 490);
+
+  //YOU LOST TEXT
   fill(255);
   noStroke();
   textAlign(CENTER);
-  text("YOU LOST!!", 305, 275);
+  text("YOU LOST!", 305, 275);
   textSize(15);
 
   //START PAGE BUTTON
@@ -257,7 +289,7 @@ function loseScreen() {
   fill(160);
   noStroke();
   textAlign(CENTER);
-  text("Play!", 525, 545);
+  text("Restart", 525, 545);
   textSize(50);
 
   //MOUSE WHEN CLICKED START PAGE
