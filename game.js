@@ -3,21 +3,15 @@ function setup() {
   background(255, 204, 204);
 }
 
-let x = 200;
-let y = 200;
-let s = 20;
-/*
-let ballX = 300;
-let ballY = 400; 
-let s= 1;
-*/
-
+let heartX = 40;
+let heartY = 30;
+let s = 0.1;
 let state = "start";
 
 function HEARTS(x, y, s) {
   //HEART
   noStroke();
-  fill(255, 102, 102);
+  fill(245, 255, 230);
   ellipse(x + 10 * s, y + 20 * s, 220 * s, 200 * s);
   ellipse(x + 200 * s, y + 20 * s, 220 * s, 200 * s);
   rect(x + 75 * s, y + 66 * s, 50 * s, 40 * s);
@@ -35,29 +29,72 @@ function startScreen() {
   //BACKGROUND
   background(255, 204, 204);
 
-  // for (let i = 0; i < 100; i++) {
-  //   HEARTS(i * 230, 230);
-  // }
+  //FIRST LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY, s);
+  }
+
+  //SECOND LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 80, s);
+  }
+
+  //THIRD LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY + 160, s);
+  }
+
+  //FOURTH LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 240, s);
+  }
+
+  //FIFTH LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY + 320, s);
+  }
+
+  //SIXTH LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 400, s);
+  }
+
+  //SEVENTH LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY + 480, s);
+  }
+
+  //EIGHTH LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 560, s);
+  }
 
   //TITLE BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(130, 180, 360, 90, 100);
 
+  //TITLE HEART
+  for (let i = 0; i < 1; i++) {
+    // fill(i * 255, 255, 255);
+    HEARTS(heartX + 310 + i * 100, heartY + 185, s);
+  }
+
   //GAME TITLE TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("BREAK❤️UT", 310, 243);
+  text("BREAK    UT", 310, 243);
+  textFont("Times New Roman");
   textSize(20);
 
   //START BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(234, 310, 150, 40, 100);
 
   //START TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Start!", 310, 337);
@@ -65,11 +102,11 @@ function startScreen() {
 
   //INSTURCTIONS BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(234, 360, 150, 40, 100);
 
   //INSTRUCTIONS TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Instructions", 310, 386);
@@ -94,20 +131,61 @@ function instructionsScreen() {
   //BACKGROUND
   background(255, 204, 204);
 
+  //FIRST LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY, s);
+  }
+
+  //SECOND LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 80, s);
+  }
+
+  //THIRD LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY + 160, s);
+  }
+
+  //FOURTH LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 240, s);
+  }
+
+  //FIFTH LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY + 320, s);
+  }
+
+  //SIXTH LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 400, s);
+  }
+
+  //SEVENTH LINE
+  for (let i = 0; i < 6; i++) {
+    HEARTS(heartX + i * 100, heartY + 480, s);
+  }
+
+  //EIGHTH LINE
+  for (let i = 0; i < 8; i++) {
+    HEARTS(heartX - 50 + i * 100, heartY + 560, s);
+  }
+
   //INSTRUCTIONS
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(152, 50, 300, 500, 100);
 
   //INSTRUCTIONS TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Instructions", 305, 115);
+  textFont("Times New roman");
   textSize(15);
 
   //FLOWING TEXT
-  fill(160);
+  fill(255);
   noStroke();
   textAlign(CENTER);
   text("blah blah blah", 305, 170);
@@ -115,11 +193,11 @@ function instructionsScreen() {
 
   //START PAGE BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(30, 525, 100, 30, 100);
 
   //START PAGE TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Start page", 80, 545);
@@ -127,11 +205,11 @@ function instructionsScreen() {
 
   //PLAY BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(475, 525, 100, 30, 100);
 
   //PLAY TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Play!", 525, 545);
@@ -184,15 +262,16 @@ function winScreen() {
   noStroke();
   textAlign(CENTER);
   text("YOU WON!", 305, 275);
+  textFont("Times New Roman");
   textSize(15);
 
   //START PAGE BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(30, 525, 100, 30, 100);
 
   //START PAGE TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Start page", 80, 545);
@@ -208,11 +287,11 @@ function winScreen() {
 
   //PLAY BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(475, 525, 100, 30, 100);
 
   //PLAY TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Play again!", 525, 545);
@@ -247,7 +326,7 @@ function loseScreen() {
 
   //LINES ON HEART
   strokeWeight(10);
-  stroke(200, 0, 80);
+  stroke(200, 50, 70);
   line(305, 175, 260, 250);
   line(260, 250, 340, 315);
   line(340, 315, 275, 375);
@@ -258,15 +337,16 @@ function loseScreen() {
   noStroke();
   textAlign(CENTER);
   text("YOU LOST!", 305, 275);
+  textFont("Times New Roman");
   textSize(15);
 
   //START PAGE BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(30, 525, 100, 30, 100);
 
   //START PAGE TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Start page", 80, 545);
@@ -282,11 +362,11 @@ function loseScreen() {
 
   //PLAY BUTTON
   noStroke();
-  fill(255);
+  fill(255, 150, 150);
   rect(475, 525, 100, 30, 100);
 
   //PLAY TEXT
-  fill(160);
+  fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
   text("Restart", 525, 545);
