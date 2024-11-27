@@ -1,19 +1,23 @@
+let padel;
+let ball;
+let heartX = 40;
+let heartY = 30;
+let s = 0.1;
+let state = "game";
+let x, y;
+let speed = 5;
+
 function setup() {
   createCanvas(600, 600);
   background(255, 204, 204);
-}
 
-let heartX = 40;
-let heartY = 30;
-let brickX = 40;
-let brickY = 30;
-let s = 0.1;
-let state = "start";
+  padel = new Padel();
+  ball = new Ball(300, 300, 12, 3, -3);
+}
 
 function HEARTS(x, y, s) {
   //HEART
   noStroke();
-  fill(245, 255, 230);
   ellipse(x + 10 * s, y + 20 * s, 220 * s, 200 * s);
   ellipse(x + 200 * s, y + 20 * s, 220 * s, 200 * s);
   rect(x + 75 * s, y + 66 * s, 50 * s, 40 * s);
@@ -27,53 +31,55 @@ function HEARTS(x, y, s) {
   );
 }
 
-/*function BRICKS(x, y) {
-  noStroke();
-  fill(160, 20, 20);
-  rect(brickX - 30, brickY + 30, 130, 30);
-}*/
-
 function startScreen() {
   //BACKGROUND
   background(255, 204, 204);
 
   //FIRST LINE
   for (let i = 0; i < 6; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX + i * 100, heartY, s);
   }
 
   //SECOND LINE
   for (let i = 0; i < 8; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX - 50 + i * 100, heartY + 80, s);
   }
 
   //THIRD LINE
   for (let i = 0; i < 6; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX + i * 100, heartY + 160, s);
   }
 
   //FOURTH LINE
   for (let i = 0; i < 8; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX - 50 + i * 100, heartY + 240, s);
   }
 
   //FIFTH LINE
   for (let i = 0; i < 6; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX + i * 100, heartY + 320, s);
   }
 
   //SIXTH LINE
   for (let i = 0; i < 8; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX - 50 + i * 100, heartY + 400, s);
   }
 
   //SEVENTH LINE
   for (let i = 0; i < 6; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX + i * 100, heartY + 480, s);
   }
 
   //EIGHTH LINE
   for (let i = 0; i < 8; i++) {
+    fill(245, 255, 230);
     HEARTS(heartX - 50 + i * 100, heartY + 560, s);
   }
 
@@ -83,10 +89,8 @@ function startScreen() {
   rect(130, 180, 360, 90, 100);
 
   //TITLE HEART
-  for (let i = 0; i < 1; i++) {
-    // fill(i * 255, 255, 255);
-    HEARTS(heartX + 310 + i * 100, heartY + 185, s);
-  }
+  fill(160, 20, 20);
+  HEARTS(heartX + 310, heartY + 185, s);
 
   //GAME TITLE TEXT
   fill(160, 20, 20);
@@ -241,21 +245,66 @@ function instructionsScreen() {
 function gameScreen() {
   //BACKGROUND
   background(255, 204, 204);
+}
 
-  //BALL
-  noStroke();
-  fill(255);
-  ellipse(300, 500, 20, 20);
+class Ball {
+  constructor(x, y, radius, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.speedX = speedX;
+    this.speedY = speedY;
+    this.radius = radius;
+  }
 
-  //PADEL
-  noStroke();
-  fill(160);
-  rect(240, 530, 120, 10);
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
 
-  //BRICKS
-  /*for (let i = 0; i < 6; i++) {
-    BRICKS(heartX + i * 100, heartY, s);
-  }*/
+    if (this.x - this.radius < 0 || this.x + this.radius > width) {
+      this.speedX *= -1;
+    }
+
+    if (this.y - this.radius < 0) {
+      this.speedY *= -1;
+    }
+  }
+
+  bounceUp() {
+    this.speedY = abs(this.speedY) * -1;
+  }
+
+  display() {
+    push();
+    fill(0);
+    noStroke();
+    ellipse(this.x, this.y, this.radius * 2);
+    pop();
+  }
+}
+
+class Padel {
+  constructor() {
+    this.x = 240;
+    this.y = 530;
+    this.speed = 6;
+  }
+
+  draw() {
+    //PADEL
+    noStroke();
+    fill(160);
+    rect(this.x, this.y, 120, 10);
+
+    if (state === "game") {
+      //PADEL MOVEMENT
+      if (keyIsDown(LEFT_ARROW)) {
+        this.x -= this.speed;
+      } else if (keyIsDown(RIGHT_ARROW)) {
+        this.x += this.speed;
+      }
+    }
+    this.x = constrain(this.x, 0, 480);
+  }
 }
 
 function winScreen() {
@@ -291,12 +340,10 @@ function winScreen() {
   text("Start page", 80, 545);
 
   //HEART ABOVE START PAGE
-  textAlign(CENTER);
-  text("❤️", 78, 515);
+  HEARTS(heartX + 27, heartY + 450, s);
 
-  //HEART ABOVE PLAY
-  textAlign(CENTER);
-  text("❤️", 525, 515);
+  //HEART ABOVE PLAY AGAIN
+  HEARTS(heartX + 476, heartY + 450, s);
 
   //PLAY BUTTON
   noStroke();
@@ -366,12 +413,10 @@ function loseScreen() {
   text("Start page", 80, 545);
 
   //HEART ABOVE START PAGE
-  textAlign(CENTER);
-  text("❤️", 78, 515);
+  HEARTS(heartX + 27, heartY + 450, s);
 
-  //HEART ABOVE PLAY
-  textAlign(CENTER);
-  text("❤️", 525, 515);
+  //HEART ABOVE RESTART
+  HEARTS(heartX + 476, heartY + 450, s);
 
   //PLAY BUTTON
   noStroke();
@@ -407,9 +452,13 @@ function draw() {
     instructionsScreen();
   } else if (state === "game") {
     gameScreen();
+    padel.draw();
   } else if (state === "lose") {
     loseScreen();
   } else if (state === "win") {
     winScreen();
   }
+
+  ball.display();
+  ball.update();
 }
