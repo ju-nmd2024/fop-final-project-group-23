@@ -8,7 +8,7 @@ let heartY = 30;
 let brickX = 40;
 let brickY = 30;
 let s = 0.1;
-let state = "game";
+let state = "start";
 
 function HEARTS(x, y, s) {
   //HEART
@@ -92,9 +92,9 @@ function startScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("BREAK    UT", 310, 243);
   textFont("Times New Roman");
-  textSize(25);
+  textSize(50);
+  text("BREAK    UT", 310, 243);
 
   //START BUTTON
   noStroke();
@@ -105,8 +105,8 @@ function startScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("Start!", 310, 338);
   textSize(25);
+  text("Start!", 310, 338);
 
   //INSTURCTIONS BUTTON
   noStroke();
@@ -117,8 +117,8 @@ function startScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
+  textSize(25);
   text("Instructions", 310, 387);
-  textSize(50);
 
   //MOUSE WHEN CLICKED START
   if (state === "start" && mouseIsPressed) {
@@ -188,16 +188,16 @@ function instructionsScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("Instructions", 305, 115);
+  textSize(30);
   textFont("Times New roman");
-  textSize(15);
+  text("Instructions", 305, 115);
 
   //FLOWING TEXT
   fill(255);
   noStroke();
   textAlign(CENTER);
-  text("blah blah blah", 305, 170);
   textSize(18);
+  text("blah blah blah", 305, 170);
 
   //START PAGE BUTTON
   noStroke();
@@ -208,8 +208,8 @@ function instructionsScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("Start page", 80, 545);
   textSize(18);
+  text("Start page", 80, 545);
 
   //PLAY BUTTON
   noStroke();
@@ -220,8 +220,8 @@ function instructionsScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
+  textSize(18);
   text("Play!", 525, 545);
-  textSize(30);
 
   //MOUSE WHEN CLICKED START PAGE
   if (state === "instructions" && mouseIsPressed) {
@@ -274,9 +274,9 @@ function winScreen() {
   fill(255);
   noStroke();
   textAlign(CENTER);
-  text("YOU WON!", 305, 275);
   textFont("Times New Roman");
-  textSize(18);
+  textSize(50);
+  text("YOU WON!", 305, 275);
 
   //START PAGE BUTTON
   noStroke();
@@ -287,8 +287,8 @@ function winScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("Start page", 80, 545);
   textSize(18);
+  text("Start page", 80, 545);
 
   //HEART ABOVE START PAGE
   textAlign(CENTER);
@@ -307,8 +307,8 @@ function winScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
+  textSize(18);
   text("Play again!", 526, 545);
-  textSize(50);
 
   //MOUSE WHEN CLICKED START PAGE
   if (state === "win" && mouseIsPressed) {
@@ -349,9 +349,9 @@ function loseScreen() {
   fill(255);
   noStroke();
   textAlign(CENTER);
-  text("YOU LOST!", 305, 275);
   textFont("Times New Roman");
-  textSize(18);
+  textSize(50);
+  text("YOU LOST!", 305, 275);
 
   //START PAGE BUTTON
   noStroke();
@@ -362,8 +362,8 @@ function loseScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
-  text("Start page", 80, 545);
   textSize(18);
+  text("Start page", 80, 545);
 
   //HEART ABOVE START PAGE
   textAlign(CENTER);
@@ -382,8 +382,8 @@ function loseScreen() {
   fill(160, 20, 20);
   noStroke();
   textAlign(CENTER);
+  textSize(18);
   text("Restart", 525, 545);
-  textSize(50);
 
   //MOUSE WHEN CLICKED START PAGE
   if (state === "lose" && mouseIsPressed) {
