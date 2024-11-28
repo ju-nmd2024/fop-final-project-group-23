@@ -1,9 +1,10 @@
-let padel;
+let paddle;
 let ball;
 let heartX = 40;
 let heartY = 30;
 let s = 0.1;
-let state = "game";
+let state = "start";
+let bricks = [];
 let x, y;
 let speed = 5;
 
@@ -11,8 +12,110 @@ function setup() {
   createCanvas(600, 600);
   background(255, 204, 204);
 
-  padel = new Padel();
-  ball = new Ball(300, 300, 12, 3, -3);
+  paddle = new Paddle();
+  ball = new Ball(300, 500, 12, 3, -3);
+
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < 10; col++) {
+      bricks.push(new Brick(col * 60 + 5, row * 30 + 50, 50, 20));
+    }
+  }
+}
+
+class Ball {
+  constructor(x, y, radius, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.speedX = speedX;
+    this.speedY = speedY; //HORIZONTAL SPEED
+    this.radius = radius; //VERTICAL SPEED
+  }
+
+  //BALL POSITION AND BOUNCE OFF WALLS
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    if (this.x - this.radius < 0 || this.x + this.radius > 600) {
+      this.speedX *= -1;
+    }
+
+    if (this.y - this.radius < 0) {
+      this.speedY *= -1;
+    }
+
+    if ((this, y - this.radius > height)) {
+      state = "lose";
+    }
+  }
+
+  //BALL BOUNCES UPWARD
+  bounceUp() {
+    this.speedY = abs(this.speedY) * -1;
+  }
+
+  display() {
+    push();
+    fill(0);
+    noStroke();
+    ellipse(this.x, this.y, this.radius * 2);
+    pop();
+  }
+}
+
+class Paddle {
+  constructor() {
+    this.x = 240;
+    this.y = 530;
+    this.speed = 6;
+  }
+
+  draw() {
+    //PADDLE
+    noStroke();
+    fill(160);
+    rect(this.x, this.y, 120, 10);
+
+    if (state === "game") {
+      //PADDLE MOVEMENT
+      if (keyIsDown(LEFT_ARROW)) {
+        this.x -= this.speed;
+      } else if (keyIsDown(RIGHT_ARROW)) {
+        this.x += this.speed;
+      }
+    }
+    this.x = constrain(this.x, 0, 480);
+  }
+}
+
+class Brick {
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.visible = true;
+  }
+
+  display() {
+    if (this.visible) {
+      fill(160, 20, 20);
+      noStroke();
+      rect(this.x, this.y, this.w, this.h);
+    }
+  }
+  hit(ball) {
+    if (
+      this.visible &&
+      ball.x + ball.radius > this.x &&
+      ball.x - ball.radius < this.x + this.w &&
+      ball.y + ball.radius > this.y &&
+      ball.y - ball.radius < this.y + this.h
+    ) {
+      this.visible = false;
+      ball.bounceUp();
+    }
+  }
 }
 
 function HEARTS(x, y, s) {
@@ -245,65 +348,27 @@ function instructionsScreen() {
 function gameScreen() {
   //BACKGROUND
   background(255, 204, 204);
-}
 
-class Ball {
-  constructor(x, y, radius, speedX, speedY) {
-    this.x = x;
-    this.y = y;
-    this.speedX = speedX;
-    this.speedY = speedY;
-    this.radius = radius;
+  for (let brick of bricks) {
+    brick.display();
+    brick.hit(ball);
   }
 
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
+  paddle.draw();
+  ball.display();
+  ball.update();
 
-    if (this.x - this.radius < 0 || this.x + this.radius > width) {
-      this.speedX *= -1;
-    }
-
-    if (this.y - this.radius < 0) {
-      this.speedY *= -1;
-    }
+  if (
+    ball.x + ball.radius > paddle.x &&
+    ball.x - ball.radius < paddle.x + 120 &&
+    ball.y + ball.radius > paddle.y &&
+    ball.y - ball.radius < paddle.y + 10
+  ) {
+    ball.bounceUp();
   }
 
-  bounceUp() {
-    this.speedY = abs(this.speedY) * -1;
-  }
-
-  display() {
-    push();
-    fill(0);
-    noStroke();
-    ellipse(this.x, this.y, this.radius * 2);
-    pop();
-  }
-}
-
-class Padel {
-  constructor() {
-    this.x = 240;
-    this.y = 530;
-    this.speed = 6;
-  }
-
-  draw() {
-    //PADEL
-    noStroke();
-    fill(160);
-    rect(this.x, this.y, 120, 10);
-
-    if (state === "game") {
-      //PADEL MOVEMENT
-      if (keyIsDown(LEFT_ARROW)) {
-        this.x -= this.speed;
-      } else if (keyIsDown(RIGHT_ARROW)) {
-        this.x += this.speed;
-      }
-    }
-    this.x = constrain(this.x, 0, 480);
+  if (bricks.every((brick) => !brick.visible)) {
+    state = "win";
   }
 }
 
@@ -445,6 +510,12 @@ function loseScreen() {
   }
 }
 
+function resetGame() {
+  // reset allt utom bricks
+  // ball x, y
+  // paddle x,y
+}
+
 function draw() {
   if (state === "start") {
     startScreen();
@@ -452,13 +523,9 @@ function draw() {
     instructionsScreen();
   } else if (state === "game") {
     gameScreen();
-    padel.draw();
   } else if (state === "lose") {
     loseScreen();
   } else if (state === "win") {
     winScreen();
   }
-
-  ball.display();
-  ball.update();
 }
