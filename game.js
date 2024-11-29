@@ -7,6 +7,8 @@ let state = "start";
 let bricks = [];
 let x, y;
 let speed = 5;
+let score = 0;
+let lives = 3;
 
 function setup() {
   createCanvas(600, 600);
@@ -44,8 +46,15 @@ class Ball {
       this.speedY *= -1;
     }
 
-    if ((this, y - this.radius > height)) {
-      state = "lose";
+    if (this.y - this.radius > height) {
+      lives--;
+      if (lives > 0) {
+        this.x = width / 2;
+        this.y = paddle.y - 20;
+        this.speedY = -abs(this.speedY);
+      } else {
+        state = "lose";
+      }
     }
   }
 
@@ -56,7 +65,7 @@ class Ball {
 
   display() {
     push();
-    fill(0);
+    fill(245, 255, 230);
     noStroke();
     ellipse(this.x, this.y, this.radius * 2);
     pop();
@@ -73,7 +82,7 @@ class Paddle {
   draw() {
     //PADDLE
     noStroke();
-    fill(160);
+    fill(255, 102, 102);
     rect(this.x, this.y, 120, 10);
 
     if (state === "game") {
@@ -114,6 +123,7 @@ class Brick {
     ) {
       this.visible = false;
       ball.bounceUp();
+      score += 10;
     }
   }
 }
@@ -297,14 +307,19 @@ function instructionsScreen() {
   textAlign(CENTER);
   textSize(30);
   textFont("Times New roman");
-  text("Instructions", 305, 115);
+  text("Instructions", 300, 115);
 
   //FLOWING TEXT
   fill(255);
   noStroke();
   textAlign(CENTER);
   textSize(18);
-  text("blah blah blah", 305, 170);
+  text(
+    "The goal of the game is to break all the bricks on the screen using a bouncing ball. Keep the ball in play by moving the paddle with the arrow keys, and earn points by breaking bricks. You have three lives to win, but if all three lives are lost, you lose!",
+    225,
+    170,
+    150
+  );
 
   //START PAGE BUTTON
   noStroke();
@@ -345,6 +360,22 @@ function instructionsScreen() {
   }
 }
 
+function displayScore() {
+  fill(160, 20, 20);
+  textSize(20);
+  textFont("Times New Roman");
+  textAlign(LEFT);
+  text(`Score: ${score}`, 10, 30);
+}
+
+function displayLives() {
+  fill(160, 20, 20);
+  textSize(20);
+  textFont("Times New Roman");
+  textAlign(RIGHT);
+  text(`Lives: ${lives}`, width - 10, 30);
+}
+
 function gameScreen() {
   //BACKGROUND
   background(255, 204, 204);
@@ -370,6 +401,9 @@ function gameScreen() {
   if (bricks.every((brick) => !brick.visible)) {
     state = "win";
   }
+
+  displayScore();
+  displayLives();
 }
 
 function winScreen() {
@@ -514,6 +548,17 @@ function resetGame() {
   // reset allt utom bricks
   // ball x, y
   // paddle x,y
+
+  score = 0;
+  lives = 3;
+  ball = new Ball(300, 500, 12, 3, -3);
+  paddle = new Paddle();
+  bricks = [];
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < 10; col++) {
+      bricks.push(new Brick(col * 60 + 5, row * 30 + 50, 50, 20));
+    }
+  }
 }
 
 function draw() {
@@ -525,7 +570,9 @@ function draw() {
     gameScreen();
   } else if (state === "lose") {
     loseScreen();
+    resetGame();
   } else if (state === "win") {
     winScreen();
+    resetGame();
   }
 }
