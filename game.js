@@ -17,6 +17,7 @@ function setup() {
   paddle = new Paddle();
   ball = new Ball(300, 500, 12, 3, -3);
 
+  //DISPLAY BRICKS
   for (let row = 0; row < 5; row++) {
     for (let col = 0; col < 10; col++) {
       bricks.push(new Brick(col * 60 + 5, row * 30 + 50, 50, 20));
@@ -38,14 +39,17 @@ class Ball {
     this.x += this.speedX;
     this.y += this.speedY;
 
+    //BOUNCE OFF LEFT AND RIGHT WALLS
     if (this.x - this.radius < 0 || this.x + this.radius > 600) {
       this.speedX *= -1;
     }
 
+    //BOUNCE OFF FROM TOP WALL
     if (this.y - this.radius < 0) {
       this.speedY *= -1;
     }
 
+    //BALL FALLS BELOW THE PADDLE
     if (this.y - this.radius > height) {
       lives--;
       if (lives > 0) {
@@ -63,6 +67,7 @@ class Ball {
     this.speedY = abs(this.speedY) * -1;
   }
 
+  //DISPLAY BALL
   display() {
     push();
     fill(245, 255, 230);
@@ -76,7 +81,7 @@ class Paddle {
   constructor() {
     this.x = 240;
     this.y = 530;
-    this.speed = 6;
+    this.speed = 2;
   }
 
   draw() {
@@ -93,6 +98,7 @@ class Paddle {
         this.x += this.speed;
       }
     }
+    //CONSTRAIN PADDLE WITHIN CANVAS
     this.x = constrain(this.x, 0, 480);
   }
 }
@@ -113,6 +119,7 @@ class Brick {
       rect(this.x, this.y, this.w, this.h);
     }
   }
+  //CHECK IF BALL HITS BRICK
   hit(ball) {
     if (
       this.visible &&
@@ -121,7 +128,9 @@ class Brick {
       ball.y + ball.radius > this.y &&
       ball.y - ball.radius < this.y + this.h
     ) {
+      //HIDE THE BRICK
       this.visible = false;
+      //MAKE BALL BOUNCE AND ADD SCORE
       ball.bounceUp();
       score += 10;
     }
@@ -380,15 +389,18 @@ function gameScreen() {
   //BACKGROUND
   background(255, 204, 204);
 
+  //DRAW AND CHECK COLLISION FOR BRICKS
   for (let brick of bricks) {
     brick.display();
+    //CHECK COLLISION WITH BALL
     brick.hit(ball);
   }
-
+  //DRAW PADDLE AND UPDATE BALL
   paddle.draw();
   ball.display();
   ball.update();
 
+  //CHECK COLLISION BETWEEN BALL AND PADDLE
   if (
     ball.x + ball.radius > paddle.x &&
     ball.x - ball.radius < paddle.x + 120 &&
@@ -397,7 +409,7 @@ function gameScreen() {
   ) {
     ball.bounceUp();
   }
-
+  //CHECK WIN CONDITION
   if (bricks.every((brick) => !brick.visible)) {
     state = "win";
   }
@@ -545,10 +557,6 @@ function loseScreen() {
 }
 
 function resetGame() {
-  // reset allt utom bricks
-  // ball x, y
-  // paddle x,y
-
   score = 0;
   lives = 3;
   ball = new Ball(300, 500, 12, 3, -3);
