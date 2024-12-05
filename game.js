@@ -43,6 +43,7 @@ class Ball {
     if (this.x - this.radius < 0 || this.x + this.radius > 600) {
       this.speedX *= -1;
     }
+    //Inspired by test.js, added to our folder
 
     //BOUNCE OFF FROM TOP WALL
     if (this.y - this.radius < 0) {
@@ -136,6 +137,7 @@ class Brick {
     }
   }
 }
+//Help from Edvin Hultqvist
 
 function HEARTS(x, y, s) {
   //HEART
@@ -584,3 +586,5 @@ function draw() {
     resetGame();
   }
 }
+
+//A lot of the coding is is inspired by the videos on canvas and adapted
