@@ -25,16 +25,18 @@ function setup() {
   }
 }
 
+
+
 class Ball {
   constructor(x, y, radius, speedX, speedY) {
     this.x = x;
     this.y = y;
     this.speedX = speedX;
-    this.speedY = speedY; //HORIZONTAL SPEED
-    this.radius = radius; //VERTICAL SPEED
+    this.speedY = speedY;
+    this.radius = radius;
   }
 
-  //BALL POSITION AND BOUNCE OFF WALLS
+  //BALL POSITION AND MOVEMENT
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
@@ -62,6 +64,8 @@ class Ball {
       }
     }
   }
+
+  
 
   //BALL BOUNCES UPWARD
   bounceUp() {
@@ -120,22 +124,41 @@ class Brick {
       rect(this.x, this.y, this.w, this.h);
     }
   }
+
   //CHECK IF BALL HITS BRICK
-  hit(ball) {
+  hit(ball) { 
     if (
-      this.visible &&
-      ball.x + ball.radius > this.x &&
-      ball.x - ball.radius < this.x + this.w &&
-      ball.y + ball.radius > this.y &&
-      ball.y - ball.radius < this.y + this.h
+        this.visible &&
+        ball.x + ball.radius > this.x &&
+        ball.x - ball.radius < this.x + this.w &&
+        ball.y + ball.radius > this.y &&
+        ball.y - ball.radius < this.y + this.h
     ) {
-      //HIDE THE BRICK
-      this.visible = false;
-      //MAKE BALL BOUNCE AND ADD SCORE
-      ball.bounceUp();
-      score += 10;
+        // Determine collision direction
+        const ballBottom = ball.y + ball.radius;
+        const ballTop = ball.y - ball.radius;
+        const ballRight = ball.x + ball.radius;
+        const ballLeft = ball.x - ball.radius;
+
+        const brickBottom = this.y + this.h;
+        const brickTop = this.y;
+        const brickRight = this.x + this.w;
+        const brickLeft = this.x;
+
+        if (ballBottom > brickTop && ballTop < brickBottom) {
+            // Vertical collision (top or bottom)
+            ball.speedY *= -1;
+        } else if (ballRight > brickLeft && ballLeft < brickRight) {
+            // Horizontal collision (left or right)
+            ball.speedX *= -1;
+        }
+
+        // Hide the brick and add to the score
+        this.visible = false;
+        score += 10;
     }
-  }
+}
+
 }
 //Help from Edvin Hultqvist
 
