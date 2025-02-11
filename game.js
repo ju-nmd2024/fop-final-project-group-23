@@ -5,6 +5,7 @@ let heartY = 30;
 let s = 0.1;
 let state = "start";
 let bricks = [];
+let  powerUps = [];
 let x, y;
 let speed = 5;
 let score = 0;
@@ -108,6 +109,7 @@ class Paddle {
   }
 }
 
+
 class Brick {
   constructor(x, y, w, h) {
     this.x = x;
@@ -125,41 +127,67 @@ class Brick {
     }
   }
 
-  //CHECK IF BALL HITS BRICK
-  hit(ball) { 
+  hit(ball) {
     if (
-        this.visible &&
-        ball.x + ball.radius > this.x &&
-        ball.x - ball.radius < this.x + this.w &&
-        ball.y + ball.radius > this.y &&
-        ball.y - ball.radius < this.y + this.h
+      this.visible &&
+      ball.x + ball.radius > this.x &&
+      ball.x - ball.radius < this.x + this.w &&
+      ball.y + ball.radius > this.y &&
+      ball.y - ball.radius < this.y + this.h
     ) {
-        // Determine collision direction
-        const ballBottom = ball.y + ball.radius;
-        const ballTop = ball.y - ball.radius;
-        const ballRight = ball.x + ball.radius;
-        const ballLeft = ball.x - ball.radius;
+      ball.speedY *= -1;
+      this.visible = false;
+      score += 10;
 
-        const brickBottom = this.y + this.h;
-        const brickTop = this.y;
-        const brickRight = this.x + this.w;
-        const brickLeft = this.x;
-
-        if (ballBottom > brickTop && ballTop < brickBottom) {
-            // Vertical collision (top or bottom)
-            ball.speedY *= -1;
-        } else if (ballRight > brickLeft && ballLeft < brickRight) {
-            // Horizontal collision (left or right)
-            ball.speedX *= -1;
-        }
-
-        // Hide the brick and add to the score
-        this.visible = false;
-        score += 10;
+      // 20% CHANCE TO DROP A POWERUP
+      if (random() < 0.2) {
+        powerUps.push(new PowerUp(this.x + this.w / 2, this.y));
+      }
     }
+  }
+}
+//Help from Edvin Hultqvist
+class PowerUp {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.size = 20;
+    this.speed = 2;
+    this.active = true;
+  }
+
+ // REMOVE POWERUP IF IT FALLS OFF SCREEN
+  update() {
+    this.y += this.speed;
+    if (this.y > height) {
+      this.active = false;
+    }
+  }
+
+  display() {
+    if (this.active) {
+      fill (160, 20, 20); 
+      noStroke();
+      ellipse(this.x, this.y, this.size);
+    }
+  }
+
+  checkCollision(paddle) {
+    if (
+      this.active &&
+      this.y + this.size / 2 > paddle.y &&
+      this.x > paddle.x &&
+      this.x < paddle.x + 120
+    ) {
+      this.active = false;
+      paddle.speed = 4; // PADDLE SPEED INCREASE
+      setTimeout(() => {
+        paddle.speed = 2; // PADDLE RESET AFTER 5 SEC
+      }, 5000);
+    }
+  }
 }
 
-}
 //Help from Edvin Hultqvist
 
 function HEARTS(x, y, s) {
@@ -409,23 +437,32 @@ function displayLives() {
   textAlign(RIGHT);
   text(`Lives: ${lives}`, width - 10, 30);
 }
-
 function gameScreen() {
-  //BACKGROUND
   background(255, 204, 204);
 
-  //DRAW AND CHECK COLLISION FOR BRICKS
+ 
   for (let brick of bricks) {
     brick.display();
-    //CHECK COLLISION WITH BALL
     brick.hit(ball);
   }
-  //DRAW PADDLE AND UPDATE BALL
+
+  // UPDATE POWERUPS
+  for (let i = powerUps.length - 1; i >= 0; i--) {
+    powerUps[i].update();
+    powerUps[i].display();
+    powerUps[i].checkCollision(paddle);
+
+    // REMOVE POWERUPS ON COLLISION
+    if (!powerUps[i].active) {
+      powerUps.splice(i, 1);
+    }
+  }
+
   paddle.draw();
   ball.display();
   ball.update();
 
-  //CHECK COLLISION BETWEEN BALL AND PADDLE
+  // CHECK COLLISION TO BALL AND PADDLE
   if (
     ball.x + ball.radius > paddle.x &&
     ball.x - ball.radius < paddle.x + 120 &&
@@ -434,7 +471,8 @@ function gameScreen() {
   ) {
     ball.bounceUp();
   }
-  //CHECK WIN CONDITION
+
+  // WIN CONDITION
   if (bricks.every((brick) => !brick.visible)) {
     state = "win";
   }
@@ -442,6 +480,7 @@ function gameScreen() {
   displayScore();
   displayLives();
 }
+
 
 function winScreen() {
   //BACKGROUND
